@@ -1,5 +1,5 @@
-const sumUp = (array) => {
-  
+var sumUp = (array) => {
+
 }
 
 export default sumUp;
