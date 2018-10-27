@@ -33,7 +33,7 @@ jobs:
           name: Run Test
           command: |
             ./cc-test-reporter before-build
-            nyc --reporter=lcov yarn test
+            nyc --reporter=lcov npm run test
       - run:
           name: Send Test Report
           command: |
