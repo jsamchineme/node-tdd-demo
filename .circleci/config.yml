@@ -7,6 +7,7 @@ jobs:
         environment:
           TEST_DATABASE_URL: postgresql://root@localhost/circle_test
           NODE_ENV: test
+          DEBUG: *
           CC_TEST_REPORTER_ID: a085c78b43723c272ca3cc3dfa36354ec11ee9842d50796e915f456dfbddaf60
       - image: circleci/postgres:9.6-alpine-postgis-ram
     steps:
