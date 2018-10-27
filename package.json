@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha test.js",
-    "migrate": "set DEBUG=* && node server/config/dbsetup"
+    "migrate": "cross-env DEBUG=* && babel-node server/config/dbsetup"
   },
   "nyc": {
     "require": [
