@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/tdd-showcase
+    docker:
+      - image: circleci/node:8.9.4
+    environment:
+      - NODE_ENV: development
+      - CC_TEST_REPORTER_ID: a085c78b43723c272ca3cc3dfa36354ec11ee9842d50796e915f456dfbddaf60
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Setup Dependencies
+          command: npm install
+      - run:
+          name: Setup Istanbul
+          command: sudo npm install -g nyc
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+    #   - run:
+    #       name: Setup Database
+    #       command: npm run migrate
+      - run:
+          name: Setup Code Climate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Run Test
+          command: |
+            ./cc-test-reporter before-build
+            nyc --reporter=lcov yarn test
+      - run:
+          name: Send Test Report
+          command: |
+            nyc report --reporter=text-lcov
+            ./cc-test-reporter after-build --exit-code $?

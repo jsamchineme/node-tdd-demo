@@ -4,11 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "nyc mocha --require babel-register --require babel-polyfill test.js"
+  },
+  "nyc": {
+    "require": [
+      "babel-register",
+      "babel-polyfill"
+    ],
+    "reporter": [
+      "lcov",
+      "html",
+      "text"
+    ]
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "mocha": "^5.2.0"
