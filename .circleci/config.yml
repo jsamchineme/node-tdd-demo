@@ -4,9 +4,18 @@ jobs:
     working_directory: ~/tdd-showcase
     docker:
       - image: circleci/node:8.9.4
-    environment:
-      - NODE_ENV: development
-      - CC_TEST_REPORTER_ID: a085c78b43723c272ca3cc3dfa36354ec11ee9842d50796e915f456dfbddaf60
+        environment:
+          TEST_DATABASE_URL: postgresql://ubuntu@localhost/circle_test
+          PGHOST: 127.0.0.1
+          PGUSER: ubuntu
+          NODE_ENV: test
+          DEBUG: database
+          CC_TEST_REPORTER_ID: a085c78b43723c272ca3cc3dfa36354ec11ee9842d50796e915f456dfbddaf60
+      - image: circleci/postgres:9.6-alpine-postgis-ram
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: circle_test
+          POSTGRES_PASSWORD: ""
     steps:
       - checkout
       - restore_cache:
@@ -21,9 +30,9 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-    #   - run:
-    #       name: Setup Database
-    #       command: npm run migrate
+      - run:
+          name: Setup Database
+          command: npm run migrate
       - run:
           name: Setup Code Climate Test Reporter
           command: |
